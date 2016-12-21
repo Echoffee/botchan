@@ -24,7 +24,7 @@ public SynonymsDictionary dictionary;
         return result;
     }
 
-    public String TranslateSentence(String s)
+    /*public String TranslateSentence(String s)
     {
         String result = s;
         for (String w : dictionary.GetKnownWords()) {
@@ -32,6 +32,23 @@ public SynonymsDictionary dictionary;
         }
         result = result.replaceAll("(\\s[A-Za-z0-9 ]+(?=_))|(([A-Za-z0-9]+\\s(?=_)|\\s[A-Za-z0-9]+)(?=_))", " ");
         return result;
+    }*/
+    public Sentence TranslateMessage(String s)
+    {
+        String result = s;
+        for (String w : dictionary.GetKnownWords()) {
+            result = result.replaceAll(w, dictionary.GetMeaningOf(w));
+        }
+        String pattern = result.replaceAll("\\s+", " ");
+        String[] split = pattern.split(" ");
+        Sentence sentence = new Sentence(this);
+        for(String w : split)
+        {
+            Word e = new Word();
+            e.word = w;
+            sentence.sentence.add(e);
+        }
+        return sentence;
     }
 
     public String NoSymbols(String s)

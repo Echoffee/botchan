@@ -23,9 +23,10 @@ public class MessageReceivedIL implements IListener<MessageReceivedEvent> {
         String message = builder.NoSymbols(event.getMessage().getContent());
         IChannel channel = event.getMessage().getChannel();
         IDiscordClient client = event.getClient();
-        String translated = builder.TranslateSentence(message);
+        Sentence translated = builder.TranslateMessage(message);
         try {
-            new MessageBuilder(client).withChannel(channel).withContent(translated).build();
+            if (translated.Matches("__greeting__ __botchan__"))
+                new MessageBuilder(client).withChannel(channel).withContent("win").build();
         }catch (Exception e)
         {
             System.out.print("Error while processing message");
