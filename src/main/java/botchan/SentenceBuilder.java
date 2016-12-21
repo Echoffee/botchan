@@ -30,7 +30,7 @@ public SynonymsDictionary dictionary;
         for (String w : dictionary.GetKnownWords()) {
             result = result.replaceAll(w, dictionary.GetMeaningOf(w));
         }
-        result = result.replaceAll("(?=\\s([a-zA-Z0-9 ]+))\\s|([a-zA-Z0-9]+\\s)", " ");
+        result = result.replaceAll("(\\s[A-Za-z0-9 ]+(?=_))|(([A-Za-z0-9]+\\s(?=_)|\\s[A-Za-z0-9]+)(?=_))", " ");
         return result;
     }
 
