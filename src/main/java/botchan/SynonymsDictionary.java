@@ -1,29 +1,33 @@
 package botchan;
 
 import java.io.*;
-import java.util.Dictionary;
-import java.util.Enumeration;
-import java.util.LinkedList;
+import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Created by echo on 21/12/2016.
  */
 public class SynonymsDictionary {
-    public Map<String, String[]> dictionary;
+    public Map<String, String[]> synDictionary;
+    public Map<String, String> meaDictionary;
 
     public SynonymsDictionary(String path)
     {
+        synDictionary = new HashMap<>();
+        meaDictionary = new HashMap<>();
         try
         {
         BufferedReader br = new BufferedReader(new FileReader(path));
         String item = "";
-        while ((item = br.readLine()) != "")
+        while ((item = br.readLine()) != null)
         {
             String[] split = item.split(" : ");
             String meaning = split[0];
             String[] synonyms = split[1].split(", ");
-            dictionary.put(meaning, synonyms);
+            synDictionary.put(meaning, synonyms);
+            for(String w : synonyms)
+                meaDictionary.put(w, meaning);
         }
 
         }catch(FileNotFoundException e)
@@ -32,7 +36,7 @@ public class SynonymsDictionary {
             e.printStackTrace();
         }catch (Exception e)
         {
-            System.out.print("Error while loading dictionary");
+            System.out.print("Error while loading synDictionary");
             e.printStackTrace();
         }
     }
@@ -41,9 +45,9 @@ public class SynonymsDictionary {
     {
         try{
             BufferedWriter bw = new BufferedWriter(new FileWriter(path));
-            for (String key : dictionary.keySet())
+            for (String key : synDictionary.keySet())
             {
-                String[] syns = dictionary.get(key);
+                String[] syns = synDictionary.get(key);
                 StringBuilder sb = new StringBuilder();
                 sb.append(key);
                 sb.append(" : ");
@@ -63,8 +67,18 @@ public class SynonymsDictionary {
             e.printStackTrace();
         }catch (Exception e)
         {
-            System.out.print("Errir while saving dictionary");
+            System.out.print("Errir while saving synDictionary");
             e.printStackTrace();
         }
+    }
+
+    public String GetMeaningOf(String word)
+    {
+        return meaDictionary.get(word);
+    }
+
+    public Set<String> GetKnownWords()
+    {
+        return meaDictionary.keySet();
     }
 }
