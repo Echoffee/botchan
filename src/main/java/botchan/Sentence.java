@@ -1,6 +1,8 @@
 package botchan;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by echo on 21/12/2016.
@@ -10,17 +12,21 @@ public class Sentence {
 
     public SentenceBuilder builder;
 
+    public Map<String, String> variables;
+
     public Sentence(SentenceBuilder builder)
     {
         this.sentence = new ArrayList<>();
         this.builder = builder;
+        this.variables = new HashMap<>();
     }
 
     public ArrayList<Word> DuplicateSentence()
     {
         ArrayList<Word> sentenceClone = new ArrayList<>();
         for (Word w : sentence)
-            sentenceClone.add(w.Duplicate());
+            if (w.word != null)
+                sentenceClone.add(w.Duplicate());
         return sentenceClone;
     }
 
@@ -34,7 +40,7 @@ public class Sentence {
         boolean tripleScope = false;
         boolean varOrScope = false;
         ArrayList<Word> sentence2 = DuplicateSentence();
-        for (int i = 0; i < Math.min(split.length, sentence.size()); i++)
+        for (int i = 0; i < Math.min(split.length, sentence.size()) && i + decal < sentence.size(); i++)
         {
             /*
             Syntaxe :
@@ -44,8 +50,7 @@ public class Sentence {
             ... : séquence de mots avec . possible
             valA(+)valB : OR
              */
-            if (varScope || doubleScope || tripleScope)
-                i--;
+
             Word word = sentence2.get(i + decal);
             String patt = split[i];
             boolean pass = false;
@@ -58,20 +63,22 @@ public class Sentence {
             if (patt.charAt(0) == '$' || varScope)
             {
                 //variable
+
+                word.value = patt;
+                word.type = WordType.variable;
+                decal++;
+                varScope = true;
+                pass = true;
                 if (i + 1 < split.length)
-                    if (!split[i + 1].equals(word))
+                    if (split[i + 1].equals(word))
                     {
-                        word.value = patt;
-                        word.type = WordType.variable;
-                        varScope = true;
-                        decal++;
-                    }else{
                         decal--;
                         varScope = false;
                     }
-
-                pass = true;
             }
+
+            if (varScope || doubleScope || tripleScope)
+                i--;
 
             if (!pass)
                 return false;
@@ -80,5 +87,17 @@ public class Sentence {
         return true;
     }
 
+    public void ComputeVariables()
+    {
+        for(Word w : sentence)
+        {
+            if (w.type == WordType.variable)
+            {
+                if (!variables.containsKey(w.value))
+                    variables.put(w.value, "");
+                variables.replace(w.value, variables.get(w.value) + " " + w.word);
+            }
+        }
+    }
 
 }

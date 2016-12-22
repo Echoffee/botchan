@@ -37,16 +37,20 @@ public SynonymsDictionary dictionary;
     {
         String result = s;
         for (String w : dictionary.GetKnownWords()) {
-            result = result.replaceAll(w, dictionary.GetMeaningOf(w));
+            String b = (w.charAt(w.length() - 1) == '\''?"":"\\b");
+            result = result.replaceAll("\\b" + w + b, " " + dictionary.GetMeaningOf(w) + " ");
         }
         String pattern = result.replaceAll("\\s+", " ");
         String[] split = pattern.split(" ");
+
         Sentence sentence = new Sentence(this);
         for(String w : split)
         {
-            Word e = new Word();
-            e.word = w;
-            sentence.sentence.add(e);
+            if (w != null && !w.equals("")) {
+                Word e = new Word();
+                e.word = w;
+                sentence.sentence.add(e);
+            }
         }
         return sentence;
     }

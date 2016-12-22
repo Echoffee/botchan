@@ -13,6 +13,8 @@ public class MessageReceivedIL implements IListener<MessageReceivedEvent> {
 
     public SentenceBuilder builder;
 
+    public String waifu;
+
     public MessageReceivedIL()
     {
         this.builder = new SentenceBuilder();
@@ -27,6 +29,19 @@ public class MessageReceivedIL implements IListener<MessageReceivedEvent> {
         try {
             if (translated.Matches("__greeting__ __botchan__"))
                 new MessageBuilder(client).withChannel(channel).withContent("win").build();
+
+            if (translated.Matches("__je__ __etre__ $$waifu$$"))
+            {
+                translated.ComputeVariables();
+                waifu = translated.variables.get("$$waifu$$");
+                new MessageBuilder(client).withChannel(channel).withContent("ok").build();
+            }
+
+            if (translated.Matches("__qui__ __etre__ __je__ ?"))
+            {
+                new MessageBuilder(client).withChannel(channel).withContent("Tu es " + waifu).build();
+            }
+
         }catch (Exception e)
         {
             System.out.print("Error while processing message");
