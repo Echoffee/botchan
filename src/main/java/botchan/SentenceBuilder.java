@@ -60,6 +60,7 @@ public SynonymsDictionary dictionary;
         String result = s;
         result = Normalizer.normalize(result, Normalizer.Form.NFD);
         result = result.replaceAll("[^\\p{ASCII}]", "");
+        result = result.replaceAll("[-,]", " ");
         return result;
     }
 }
