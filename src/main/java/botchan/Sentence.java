@@ -95,7 +95,8 @@ public class Sentence {
             {
                 if (!variables.containsKey(w.value))
                     variables.put(w.value, "");
-                variables.replace(w.value, variables.get(w.value) + " " + w.word);
+                String space = (variables.get(w.value).equals("")?"":" ");
+                variables.replace(w.value, variables.get(w.value) + space + w.word);
             }
         }
     }

@@ -28,7 +28,7 @@ public class MessageReceivedIL implements IListener<MessageReceivedEvent> {
         Sentence translated = builder.TranslateMessage(message);
         try {
             if (translated.Matches("__greeting__ __botchan__"))
-                new MessageBuilder(client).withChannel(channel).withContent("win").build();
+                new MessageBuilder(client).withChannel(channel).withContent("Salut " + event.getMessage().getAuthor().getName() + "!").build();
 
             if (translated.Matches("__je__ __etre__ $$waifu$$"))
             {
@@ -39,8 +39,11 @@ public class MessageReceivedIL implements IListener<MessageReceivedEvent> {
 
             if (translated.Matches("__qui__ __etre__ __je__ ?"))
             {
-                new MessageBuilder(client).withChannel(channel).withContent("Tu es " + waifu).build();
+                new MessageBuilder(client).withChannel(channel).withContent("Tu es " + waifu + ".").build();
             }
+
+            if (translated.Matches("__ce__ __etre__ __bien__"))
+                new MessageBuilder(client).withChannel(channel).withContent("Yay ! :heart:").build();
 
         }catch (Exception e)
         {
