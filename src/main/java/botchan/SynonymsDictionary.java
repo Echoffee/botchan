@@ -41,6 +41,36 @@ public class SynonymsDictionary {
         }
     }
 
+    public SynonymsDictionary(String path, char letter)
+    {
+        synDictionary = new HashMap<>();
+        meaDictionary = new HashMap<>();
+        try
+        {
+            BufferedReader br = new BufferedReader(new FileReader(path));
+            String item = "";
+            while ((item = br.readLine()) != null) {
+                String[] split = item.split(" : ");
+                String meaning = split[0];
+                String[] synonyms = split[1].split(", ");
+                synDictionary.put(meaning, synonyms);
+                for (String w : synonyms) {
+                    if (w.charAt(0) == letter)
+                    meaDictionary.put(w, meaning);
+                }
+            }
+
+        }catch(FileNotFoundException e)
+        {
+            System.out.print("Dictionary file not found");
+            e.printStackTrace();
+        }catch (Exception e)
+        {
+            System.out.print("Error while loading synDictionary");
+            e.printStackTrace();
+        }
+    }
+
     public void SaveDictionary(String path)
     {
         try{

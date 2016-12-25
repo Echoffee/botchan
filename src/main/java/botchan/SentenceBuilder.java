@@ -9,11 +9,13 @@ import java.util.*;
  */
 public class SentenceBuilder {
 public SynonymsDictionary dictionary;
+public Dictionary2 dictionary2;
 
 
     public SentenceBuilder()
     {
         this.dictionary = new SynonymsDictionary("dictionary.txt");
+        this.dictionary2 = new Dictionary2("dictionary.txt");
     }
 
     public String CreateSentence(String s)
@@ -36,12 +38,16 @@ public SynonymsDictionary dictionary;
     public Sentence TranslateMessage(String s)
     {
         String result = s;
-        for (String w : dictionary.GetKnownWords()) {
+        /*for (String w : dictionary.GetKnownWords()) {
             String b = (w.charAt(w.length() - 1) == '\''?"":"\\b");
             result = result.replaceAll("\\b" + w + b, " " + dictionary.GetMeaningOf(w) + " ");
-        }
+        }*/
         String pattern = result.replaceAll("\\s+", " ");
         String[] split = pattern.split(" ");
+        for (int i = 0; i < split.length; i++) {
+            split[i] = dictionary2.GetMeaningOf(split[i]);
+
+        }
 
         Sentence sentence = new Sentence(this);
         for(String w : split)
