@@ -34,13 +34,18 @@ public class Sentence {
     {
         pattern = pattern.replaceAll("\\s+", " ");
         String[] split = pattern.split(" ");
+        int goal = split.length;
+        for (int i = 0; i < split.length; i++)
+            if (split[i].equals("..") || split[i].equals("..."))
+                goal--;
         int decal = 0;
         boolean varScope = false;
         boolean doubleScope = false;
         boolean tripleScope = false;
         boolean varOrScope = false;
         ArrayList<Word> sentence2 = DuplicateSentence();
-        for (int i = 0; i < Math.min(split.length, sentence.size()) && i + decal < sentence.size(); i++)
+        int i = 0;
+        for (i = 0; i < Math.min(split.length, sentence.size()) && i + decal < sentence.size(); i++)
         {
             /*
             Syntaxe :
@@ -54,6 +59,7 @@ public class Sentence {
             Word word = sentence2.get(i + decal);
             String patt = split[i];
             boolean pass = false;
+
             if (word.word.equals(split[i]))
             {
                 //plain, synonym
@@ -70,10 +76,29 @@ public class Sentence {
                 varScope = true;
                 pass = true;
                 if (i + 1 < split.length)
-                    if (split[i + 1].equals(word))
+                    if (split[i + 1].equals(word.word))
                     {
                         decal--;
                         varScope = false;
+                    }
+            }
+
+            if (patt.equals(".."))
+            {
+                //double .
+
+                //word.value = patt;
+                word.type = WordType.plain;
+                decal++;
+                doubleScope = true;
+                pass = true;
+                if (i + 1 < split.length)
+                    if (split[i + 1].equals(word.word) || word.word.charAt(word.word.length() - 1) == '.')
+                    {
+                        decal--;
+                        if (decal != 0)
+                            decal--;
+                        doubleScope = false;
                     }
             }
 
@@ -84,7 +109,9 @@ public class Sentence {
                 return false;
         }
         this.sentence = sentence2;
-        return true;
+        if (i >= goal)
+            return true;
+        return false;
     }
 
     public void ComputeVariables()

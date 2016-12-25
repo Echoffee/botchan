@@ -42,7 +42,7 @@ public class MessageReceivedIL implements IListener<MessageReceivedEvent> {
                 new MessageBuilder(client).withChannel(channel).withContent("Tu es " + waifu + ".").build();
             }
 
-            if (translated.Matches("__ce__ __etre__ __bien__"))
+            if (translated.Matches("__ce__ __etre__ .. __bien__"))
                 new MessageBuilder(client).withChannel(channel).withContent("Yay ! :heart:").build();
 
         }catch (Exception e)
