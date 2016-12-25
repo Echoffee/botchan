@@ -43,7 +43,7 @@ public Dictionary2 dictionary2;
             result = result.replaceAll("\\b" + w + b, " " + dictionary.GetMeaningOf(w) + " ");
         }*/
         String pattern = result.replaceAll("\\s+", " ");
-        String[] split = pattern.split(" ");
+        String[] split = pattern.split("[ -,]");
         for (int i = 0; i < split.length; i++) {
             split[i] = dictionary2.GetMeaningOf(split[i]);
 

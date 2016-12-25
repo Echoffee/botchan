@@ -21,7 +21,14 @@ public class Dictionary2 {
 
     public String GetMeaningOf(String w)
     {
-        String result = Sections.get("" + w.charAt(0)).GetMeaningOf(w);
-        return result;
+        String l = w.toLowerCase();
+        SynonymsDictionary d = Sections.get("" + l.charAt(0));
+        if (d == null)
+            return w;
+        String result = d.GetMeaningOf(l);
+        if (result != null)
+            return result;
+        else
+            return w;
     }
 }

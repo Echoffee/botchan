@@ -104,7 +104,10 @@ public class SynonymsDictionary {
 
     public String GetMeaningOf(String word)
     {
-        return meaDictionary.get(word);
+        if (meaDictionary.containsKey(word))
+            return meaDictionary.get(word);
+        else
+            return null;
     }
 
     public Set<String> GetKnownWords()
